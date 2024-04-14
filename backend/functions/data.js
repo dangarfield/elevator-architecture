@@ -1,26 +1,24 @@
-// import { MongoClient, ServerApiVersion } from 'mongodb'
+import { MongoClient, ServerApiVersion } from 'mongodb'
 
 // console.log('process.env.MONGODB_URI', process.env.MONGODB_URI) // TEMP DEBUG
-// const client = new MongoClient(process.env.MONGODB_URI, {
-//   serverApi: {
-//     version: ServerApiVersion.v1,
-//     strict: false,
-//     deprecationErrors: true
-//   }
-// })
+const client = new MongoClient(process.env.MONGODB_URI, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: false,
+    deprecationErrors: true
+  }
+})
 
-// const db = client.db('skills')
-// const skillsCollection = db.collection('skills')
-
-import {skillsCollection} from '../services/db.js'
+const db = client.db('skills')
+const skillsCollection = db.collection('skills')
 
 export default async (req, context) => {
   console.log('req', req.method)
 
   try {
-    console.log('client')
-    console.log('db')
-    console.log('skillsCollection')
+    // console.log('client')
+    // console.log('db')
+    // console.log('skillsCollection')
 
     if (req.method === 'GET') {
       console.log('get skills')
@@ -50,10 +48,5 @@ export default async (req, context) => {
     }
   } catch (error) {
     console.error('Error connecting to MongoDB:', error)
-  } finally {
-    // if (cachedClient) {
-    //   await cachedClient.close()
-    //   cachedClient = null
-    // }
   }
 }
