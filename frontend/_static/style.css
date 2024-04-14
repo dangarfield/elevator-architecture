@@ -8,14 +8,52 @@ body {
 .row.h-10 {
   height: 10svh; /* 1/11th of total viewport height */
 }
+
 .counter {
-    background: linear-gradient(to right, rgb(52, 58, 64) 50%, grey 0%);
+    background: linear-gradient(to right, rgb(52, 58, 64) 50%, red 0%);
+    /* background: linear-gradient(to right, rgb(52, 58, 64) 50%, grey 0%); */
     background-size: 200% 100%;
-  transition: background-position 0.5s;
+    transition: background-position 0.5s;
 
     border: none;
     padding: 10px;
     box-sizing: border-box;
+}
+.counter-0 {
+    background: linear-gradient(to right, rgb(52, 58, 64) 50%, #7030A0 0%);    
+    background-size: 200% 100%;
+}
+.counter-1 {
+    background: linear-gradient(to right, rgb(52, 58, 64) 50%, #0070C0 0%);    
+    background-size: 200% 100%;
+}
+.counter-2 {
+    background: linear-gradient(to right, rgb(52, 58, 64) 50%, #00B050 0%);    
+    background-size: 200% 100%;
+}
+.counter-3 {
+    background: linear-gradient(to right, rgb(52, 58, 64) 50%, #00B0F0 0%);    
+    background-size: 200% 100%;
+}
+.counter-4 {
+    background: linear-gradient(to right, rgb(52, 58, 64) 50%, #92D050 0%);    
+    background-size: 200% 100%;
+}
+.counter-5 {
+    background: linear-gradient(to right, rgb(52, 58, 64) 50%, #FFC000 0%);    
+    background-size: 200% 100%;
+}
+.counter-6 {
+    background: linear-gradient(to right, rgb(52, 58, 64) 50%, #C00000 0%);    
+    background-size: 200% 100%;
+}
+.counter-7 {
+    background: linear-gradient(to right, rgb(52, 58, 64) 50%, #DC678A 0%);    
+    background-size: 200% 100%;
+}
+.counter-8 {
+    background: linear-gradient(to right, rgb(52, 58, 64) 50%, #FF9900 0%);    
+    background-size: 200% 100%;
 }
 /* .ele-pic {
     background-image: url('/img/elevator-modified.png')
