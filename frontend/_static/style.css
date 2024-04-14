@@ -2,10 +2,10 @@ body {
     /* background-color: rgb(240, 240, 240); */
 }
 .row.h-11 {
-  height: 9.0909090909vh; /* 1/11th of total viewport height */
+  height: 9.0909090909svh; /* 1/11th of total viewport height */
 }
 .row.h-10 {
-  height: 10vh; /* 1/11th of total viewport height */
+  height: 10svh; /* 1/11th of total viewport height */
 }
 .counter {
     background: linear-gradient(to right, rgb(52, 58, 64) 50%, grey 0%);
