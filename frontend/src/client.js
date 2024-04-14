@@ -4,15 +4,15 @@ Chart.register(ChartDataLabels)
 Chart.register(Colors)
 
 const topics = [
-  { id: 0, title: 'Strategic Board & C-Level', colour: 'purple', lineTotal: 6 },
-  { id: 1, title: 'End-to-end, Customer Channels, Programmes', colour: 'blue', lineTotal: 1 },
-  { id: 2, title: 'Functional Domains', colour: 'green', lineTotal: 2 },
-  { id: 3, title: 'Data Management Services', colour: 'lightblue', lineTotal: 3 },
-  { id: 4, title: 'DevOps, Auth', colour: 'lightgreen', lineTotal: 2 },
-  { id: 5, title: 'Integration Services', colour: 'yellow', lineTotal: 0 },
-  { id: 6, title: 'Security Services', colour: 'red', lineTotal: 0 },
-  { id: 7, title: 'Technology & Infrastructure Services', colour: 'pink', lineTotal: 0 },
-  { id: 8, title: 'Operational Services', colour: 'orange', lineTotal: 0 }
+  { id: 0, title: 'Strategic Board & C-Level', colour: '#7030A0', lighter: '#7030A0', lineTotal: 0 },
+  { id: 1, title: 'End-to-end, Customer Channels, Programmes', colour: '#0070C0', lighter: '#80caff',lineTotal: 1 },
+  { id: 2, title: 'Functional Domains', colour: '#00B050', lighter: '#79ffb6', ineTotal: 2 },
+  { id: 3, title: 'Data Management Services', colour: '#00B0F0', lighter: '#93e2ff', lineTotal: 3 },
+  { id: 4, title: 'DevOps, Auth', colour: '#92D050', lighter: '#d3ecb9', lineTotal: 2 },
+  { id: 5, title: 'Integration Services', colour: '#FFC000', lighter: '#ffe699', lineTotal: 0 },
+  { id: 6, title: 'Security Services', colour: '#C00000', lighter: '#ff8080',lineTotal: 0 },
+  { id: 7, title: 'Technology & Infrastructure Services', colour: '#DC678A', lighter: '#f1c2d0',lineTotal: 0 },
+  { id: 8, title: 'Operational Services', colour: '#FF9900', lighter: '#ffd699', lineTotal: 0 }
 ]
 const totalMax = 15
 const lineMax = 8
@@ -125,9 +125,14 @@ const initAddSkills = () => {
 const renderResults = () => {
   const html =
   ` <div class="row h-10">
-        <div class="col-12 d-flex justify-content-center align-items-center">
+        <div class="col-6 offset-3 d-flex justify-content-center align-items-center">
             <div class="content">
                 <h1>Elevator Architecture</h1>
+            </div>
+        </div>
+        <div class="col-3 d-flex justify-content-center align-items-center">
+            <div class="content">
+                <h2 class="text-secondary">https://is.gd/YTamzl</h2>
             </div>
         </div>
     </div>
@@ -144,10 +149,10 @@ const renderResults = () => {
     </div>`
   }).join('')}
         </div>
-        <div class="col-2" style="background:lightblue;">
-            b
+        <div class="col-1 ele-pic p-0" style="height: 90vh">
+            <img src="/img/elevator-slim-w.png" class='img-fluid p-0 m-0' style="max-height:90vh;"/>
         </div>
-        <div class="col-6">
+        <div class="col-7">
             <canvas id="results-chart" style="height: 100%"></canvas>
         </div>
     </div>
@@ -165,7 +170,9 @@ const renderResults = () => {
         label: 'results',
         // data: [12, 19, 3, 5, 2, 3, 7, 4, 9],
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        backgroundColor: topics.map(t => t.colour)
+        backgroundColor: topics.map(t => t.colour),
+        // backgroundColor: topics.map(t => t.lighter),
+        // borderColor: topics.map(t => t.colour)
       }]
     },
     options: {
@@ -223,7 +230,7 @@ const initResults = async () => {
   updateResults(chart)
   setInterval(() => {
     updateResults(chart)
-  }, 10000)
+  }, 6000)
 }
 
 const clearResults = async () => {
