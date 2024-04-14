@@ -214,24 +214,35 @@ const updateResults = async (chart) => {
   const results = await response.json()
 
   console.log('data', chart.data.datasets[0], results)
-  const randomList = Array.from({ length: 9 }, () => Math.floor(Math.random() * 21))
-
+  //   const randomList = Array.from({ length: 9 }, () => Math.floor(Math.random() * 21))
   chart.data.datasets[0].data = results
   chart.update()
 }
 const initResults = async () => {
-  const response = await fetch('/api/data')
-  const results = await response.json()
-  const chart = renderResults(results)
+  const chart = renderResults()
+  updateResults(chart)
   setInterval(() => {
     updateResults(chart)
   }, 10000)
 }
 
+const clearResults = async () => {
+  const response = await fetch('/api/data', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(topics.map(t => t.lineTotal))
+  })
+  console.log('res.json delete', response.json())
+  window.location.pathname = '/results'
+}
 if (window.location.pathname === '/results') {
-  // Execute your logic here
   console.log('The URL path is /results')
   initResults()
+} else if (window.location.pathname === '/clear') {
+  console.log('clear')
+  clearResults()
 } else {
   initAddSkills()
 }

@@ -1,5 +1,6 @@
 import { MongoClient, ServerApiVersion } from 'mongodb'
 
+console.log('process.env.MONGODB_URI', process.env.MONGODB_URI) // TEMP DEBUG
 const client = new MongoClient(process.env.MONGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -20,7 +21,9 @@ export default async (req, context) => {
     console.log('skillsCollection')
 
     if (req.method === 'GET') {
-      const all = await (await skillsCollection.find().toArray()).map(s => s.data).reduce((acc, sublist) =>
+      let all = (await (await skillsCollection.find().toArray()))
+      if (all.length === 0) all = [{ data: [0, 0, 0, 0, 0, 0, 0, 0, 0] }]
+      all = all.map(s => s.data).reduce((acc, sublist) =>
         acc.map((value, index) => value + sublist[index])
       )
       console.log('all', all)
@@ -32,6 +35,9 @@ export default async (req, context) => {
       return Response.json({
         message: 'Hello POST'
       })
+    } else if (req.method === 'DELETE') {
+      await skillsCollection.deleteMany()
+      return Response.json({ message: 'complete' })
     } else {
       return Response.json({
         message: 'error'
