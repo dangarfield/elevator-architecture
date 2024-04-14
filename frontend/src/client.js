@@ -41,12 +41,12 @@ const renderSkills = () => {
         </div>
         <div class="col-6 d-flex justify-content-start align-items-center">
             <div class="input-group mb-3">
-                <button class="btn btn-outline-secondary action" data-topic="${index}" data-value="-1" type="button">-</button>
+                <button class="btn btn-outline-secondary action" data-topic="${index}" data-value="-1" type="button"><i class="bi bi-dash-lg"></i></button>
                 <input type="text" class="form-control text-center counter counter-${index}" data-topic="${index}" disabled placeholder="${topic.lineTotal}"
                     style="
 
                     background-position: ${backgroundPosition}">
-                <button class="btn btn-outline-secondary action" data-topic="${index}" data-value="1" type="button">+</button>
+                <button class="btn btn-outline-secondary action" data-topic="${index}" data-value="1" type="button"><i class="bi bi-plus-lg"></i></button>
             </div>
         </div>
     </div>`
