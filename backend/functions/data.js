@@ -1,16 +1,18 @@
-import { MongoClient, ServerApiVersion } from 'mongodb'
+// import { MongoClient, ServerApiVersion } from 'mongodb'
 
-console.log('process.env.MONGODB_URI', process.env.MONGODB_URI) // TEMP DEBUG
-const client = new MongoClient(process.env.MONGODB_URI, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: false,
-    deprecationErrors: true
-  }
-})
+// console.log('process.env.MONGODB_URI', process.env.MONGODB_URI) // TEMP DEBUG
+// const client = new MongoClient(process.env.MONGODB_URI, {
+//   serverApi: {
+//     version: ServerApiVersion.v1,
+//     strict: false,
+//     deprecationErrors: true
+//   }
+// })
 
-const db = client.db('abyssboard')
-const skillsCollection = db.collection('skills')
+// const db = client.db('skills')
+// const skillsCollection = db.collection('skills')
+
+import {skillsCollection} from '../services/db.js'
 
 export default async (req, context) => {
   console.log('req', req.method)
@@ -21,7 +23,11 @@ export default async (req, context) => {
     console.log('skillsCollection')
 
     if (req.method === 'GET') {
-      let all = (await (await skillsCollection.find().toArray()))
+      console.log('get skills')
+      const findRes = await skillsCollection.find()
+      console.log('findRes')
+      let all = await (findRes.toArray())
+      console.log('toArray', all)
       if (all.length === 0) all = [{ data: [0, 0, 0, 0, 0, 0, 0, 0, 0] }]
       all = all.map(s => s.data).reduce((acc, sublist) =>
         acc.map((value, index) => value + sublist[index])
