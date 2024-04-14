@@ -48,5 +48,10 @@ export default async (req, context) => {
     }
   } catch (error) {
     console.error('Error connecting to MongoDB:', error)
-  }
+  } finally {
+        // Ensures that the client will close when you finish/error
+        console.log('You are no longer connected to MongoDB')
+        await client.close();
+    }
+
 }
