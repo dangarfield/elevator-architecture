@@ -1,5 +1,6 @@
 import { Chart, Colors } from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
+import Toastify from 'toastify-js'
 Chart.register(ChartDataLabels)
 Chart.register(Colors)
 
@@ -21,7 +22,7 @@ const renderSkills = () => {
   const total = topics.reduce((acc, topic) => acc + topic.lineTotal, 0)
   const spare = totalMax - total
   const html =
-  `<div class="row h-11">
+  `<div class="row py-1">
             <div class="col-12 d-flex justify-content-center align-items-center">
                 <div class="content">
                     <h1>Elevator Architecture</h1>
@@ -33,7 +34,7 @@ const renderSkills = () => {
         console.log('width ', width)
         const backgroundPosition = width === '' ? '0 0' : `${-width}% 0`
     return `
-    <div class="row h-11">
+    <div class="row py-1">
         <div class="col-6 d-flex justify-content-start align-items-center" style="colorxxx: ${topic.colour};">
             <div class="text-start">
                 ${topic.title}
@@ -51,8 +52,8 @@ const renderSkills = () => {
         </div>
     </div>`
   }).join('')}
-        <div class="row h-11">
-            <div class="col-6 offset-6 d-flex justify-content-center align-items-center">
+        <div class="row py-1">
+            <div class="col-12 d-flex justify-content-center align-items-center">
                 <button type="button" class="btn btn-outline-secondary w-100 submit" disabled>${spare} points remaining</button>
             </div>
         </div>`
@@ -103,18 +104,27 @@ const bindSkillsActions = () => {
   submitBtn.addEventListener('click', async () => {
     console.log('Submit')
 
+    Toastify({
+        text: "Submitted",
+        duration: 3000,
+        position: 'center',
+        style: {
+             background: "linear-gradient(to right, black, black)"   
+        }
+    }).showToast()
+
+
+
     submitBtn.setAttribute('disabled', 'disabled')
+    // await fetch('/api/data', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(topics.map(t => t.lineTotal))
+    // })
 
-    const response = await fetch('/api/data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(topics.map(t => t.lineTotal))
-    })
-
-    window.alert('Submitted - Thanks!')
-    return response.json()
+    // window.alert('Submitted - Thanks!')
   })
 }
 const initAddSkills = () => {
