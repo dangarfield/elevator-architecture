@@ -55,7 +55,7 @@ export async function handler(req, context) {
         }
     } else if (req.httpMethod === 'POST') {
       const skillsCollection = await getSkillsCollection()
-      const body = await req.json()
+      const body = JSON.parse(req.body)
       console.log('body', body)
       await skillsCollection.insertOne({ data: body })
       // return Response.json({
