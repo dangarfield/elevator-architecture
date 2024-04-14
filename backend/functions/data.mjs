@@ -12,7 +12,7 @@
 // const db = client.db('skills')
 // const skillsCollection = db.collection('skills')
 
-import {skillsCollection} from '../services/db.js'
+// import {skillsCollection} from '../services/db.js'
 
 export default async (req, context) => {
   console.log('req', req.method)
