@@ -24,9 +24,8 @@ export default async (req, context) => {
 
     if (req.method === 'GET') {
       console.log('get skills')
-      const findRes = await skillsCollection.find()
+      let all = await skillsCollection.find().toArray()
       console.log('findRes')
-      let all = await (findRes.toArray())
       console.log('toArray', all)
       if (all.length === 0) all = [{ data: [0, 0, 0, 0, 0, 0, 0, 0, 0] }]
       all = all.map(s => s.data).reduce((acc, sublist) =>
