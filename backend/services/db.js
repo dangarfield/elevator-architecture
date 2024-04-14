@@ -10,4 +10,13 @@ const client = new MongoClient(process.env.MONGODB_URI, {
 })
 const db = client.db('skills')
 
+try {
+    console.log('connecting')
+    const connection = await client.connect();
+    await client.db("admin").command({ ping: 1 })
+    console.log('connected')    
+} catch (error) {
+    console.log('connection error', error)
+}
+
 export const skillsCollection = db.collection('skills')
