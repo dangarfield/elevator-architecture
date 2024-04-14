@@ -1,6 +1,6 @@
 
-// const { MongoClient } = require("mongodb");
-import { MongoClient } from "mongodb";
+const { MongoClient } = require("mongodb");
+// import { MongoClient } from "mongodb";
 // const mongoClient = new MongoClient(process.env.MONGODB_URI)
 const mongoClient = new MongoClient('mongodb+srv://arch:arch@cluster0.bjaxcux.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 
@@ -9,7 +9,7 @@ const mongoClient = new MongoClient('mongodb+srv://arch:arch@cluster0.bjaxcux.mo
 
 const clientPromise = mongoClient.connect();
 
-export async function handler (event, context) {
+const handler  = async (event, context) => {
     try {
         const database = (await clientPromise).db('skills');
         const collection = database.collection('skills');
@@ -24,7 +24,7 @@ export async function handler (event, context) {
 }
 
 // export default handler
-// module.exports = { handler }
+module.exports = { handler }
 
 // export async function handler (event, context) {
 //   return await app.run(event, context)
