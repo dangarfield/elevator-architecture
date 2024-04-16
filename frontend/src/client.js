@@ -440,7 +440,7 @@ const renderTimeResults = () => {
             datasets: [{
                 label: 'results',
                 // data: [12, 19, 3, 5, 2, 3, 7, 4, 9],
-                data: [10, 15,25],
+                data: [0, 0,0],
                 backgroundColor: topics.map(t => t.colour),
             }]
             },
@@ -478,7 +478,6 @@ const renderTimeResults = () => {
             labels: types.map(t => t.title),
             datasets: [{
                 label: 'results',
-                // data: [12, 19, 3, 5, 2, 3, 7, 4, 9],
                 data: [0, 0, 0, 0, 0, 0],
                 backgroundColor: topics.map(t => t.colour).slice(3),
             }]
@@ -501,7 +500,8 @@ const renderTimeResults = () => {
                             size: 14,
                         },
                         color: 'white'
-                    }
+                    },
+                    display: false
                 },
                 datalabels: {
                     offset: 10,
