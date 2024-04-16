@@ -27,8 +27,26 @@ const getSkillsCollection = async () => {
   const collection = database.collection('times')
   return collection
 }
-
-
+const classifyArchitect = (internalPercentage, inwardsPercentage, outwardsPercentage) => {
+    if (internalPercentage === 50 && inwardsPercentage === 25 && outwardsPercentage === 25) {
+        return "Perfect"
+    }
+    else if (Math.abs(internalPercentage - 50) <= 5 && Math.abs(inwardsPercentage - 25) <= 5 && Math.abs(outwardsPercentage - 25) <= 5) {
+        return "Almost Perfect"
+    }
+    else if (internalPercentage > 50 && inwardsPercentage > 25) {
+        return "Goldplating"
+    }
+    else if (internalPercentage > 50) {
+        return "Ivory Tower"
+    }
+    else if (internalPercentage < 50 && outwardsPercentage > 25) {
+        return "Just Consultants"
+    }
+    else if (internalPercentage < 50) {
+        return "Absent Architect"
+    }
+}
 export async function handler(req, context) {
   console.log('req', req)
 
@@ -43,7 +61,18 @@ export async function handler(req, context) {
       let all = await skillsCollection.find().toArray()
       console.log('findRes')
       console.log('toArray', all)
-      if (all.length === 0) all = [{ data: [33,33, 33] }]
+      if (all.length === 0) all = [{ data: [0,0, 0] }]
+      const types = [0,0,0,0,0,0]
+      all.forEach(res => {
+        const type = classifyArchitect(...res.data)
+        console.log('type', type, res.data)
+        if (type === 'Perfect') types[0]++;
+        else if (type === 'Almost Perfect') types[1]++
+        else if (type === 'Goldplating') types[2]++
+        else if (type === 'Ivory Tower') types[3]++
+        else if (type === 'Just Consultants') types[4]++
+        else if (type === 'Absent Architect') types[5]++
+      })
       all = all.map(s => s.data).reduce((acc, sublist) =>
         acc.map((value, index) => value + sublist[index])
       )
@@ -59,7 +88,7 @@ export async function handler(req, context) {
       // return Response.json(all)
       return {
             statusCode: 200,
-            body: JSON.stringify(dividedArray)
+            body: JSON.stringify({times:dividedArray, types: types})
         }
     } else if (req.httpMethod === 'POST') {
       const skillsCollection = await getSkillsCollection()
