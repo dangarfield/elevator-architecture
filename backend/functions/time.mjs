@@ -66,6 +66,9 @@ export async function handler(req, context) {
       all.forEach(res => {
         const type = classifyArchitect(...res.data)
         console.log('type', type, res.data)
+        if(res.data[0] === 0 && res.data[1] === 0 && res.data[2] === 0 ) {
+          // Nothing
+        } else
         if (type === 'Perfect') types[0]++;
         else if (type === 'Almost Perfect') types[1]++
         else if (type === 'Goldplating') types[2]++

@@ -3,6 +3,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels'
 import Toastify from 'toastify-js'
 Chart.register(ChartDataLabels)
 Chart.register(Colors)
+Chart.defaults.color = '#fff'
 
 const topics = [
   { id: 0, title: 'Strategic Board & C-Level', colour: '#7030A0', lighter: '#7030A0', lineTotal: 0 },
@@ -486,6 +487,11 @@ const renderTimeResults = () => {
             indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
+            scales: {
+                y: {
+                    color: 'white'
+                }
+            },
             plugins: {
                 legend: {
                     position: 'right',
