@@ -18,6 +18,12 @@ const topics = [
 const totalMax = 15
 const lineMax = 8
 
+const times = [
+    {id: 0, title: 'Architecting', lineTotal: 15},
+    {id: 1, title: 'Getting input', lineTotal: 15},
+    {id: 2, title: 'Providing information', lineTotal: 15}
+]
+
 const renderSkills = () => {
   const total = topics.reduce((acc, topic) => acc + topic.lineTotal, 0)
   const spare = totalMax - total
@@ -54,7 +60,12 @@ const renderSkills = () => {
   }).join('')}
         <div class="row py-1">
             <div class="col-12 d-flex justify-content-center align-items-center">
-                <button type="button" class="btn btn-outline-secondary w-100 submit" disabled>${spare} points remaining</button>
+                <button type="button" class="btn btn-outline-light w-100 submit" disabled>${spare} points remaining</button>
+            </div>
+        </div>
+        <div class="row py-1">
+            <div class="col-12 d-flex justify-content-center align-items-center">
+                <button type="button" class="btn btn-link w-100 time-link">Next question</button>
             </div>
         </div>`
 
@@ -123,8 +134,12 @@ const bindSkillsActions = () => {
       },
       body: JSON.stringify(topics.map(t => t.lineTotal))
     })
+    drawTime()
 
     // window.alert('Submitted - Thanks!')
+  })
+  document.querySelector('.time-link').addEventListener('click', async () => {
+    drawTime()
   })
 }
 const initAddSkills = () => {
@@ -137,14 +152,12 @@ const renderResults = () => {
   ` <div class="row h-10">
         <div class="col-6 offset-3 d-flex justify-content-center align-items-center">
             <div class="content">
-                <h1>Elevator Architecture</h1>
+                <a href="/time" class="link-light link-underline link-underline-opacity-0"><h1>Elevator Architecture</h1></a>
             </div>
         </div>
-        <div class="col-3 d-flex justify-content-center align-items-center">
-            <div class="content">
-                <h2 class="text-secondary">https://is.gd/YTamzl</h2>
-            </div>
-        </div>
+    </div>
+    <div class="">
+        <img src="/img/qr.png" style="width: 160px; position: fixed; bottom: 10px; right: 10px;"/>
     </div>
     <div class="row">
         <div class="col-4">
@@ -252,14 +265,241 @@ const clearResults = async () => {
     body: JSON.stringify(topics.map(t => t.lineTotal))
   })
   console.log('res.json delete', response.json())
+  await fetch('/api/time', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(times.map(t => t.lineTotal))
+  })
   window.location.pathname = '/results'
 }
+
+const drawTime = async () => {
+    const html =
+    `<div class="row py-1">
+            <div class="col-12 d-flex justify-content-center align-items-center">
+                <div class="content">
+                    <h1>Elevator Architecture</h1>
+                </div>
+            </div>
+        </div>
+    ${times.map((time, index) => {
+        const width = time.lineTotal / 100 * 100
+        console.log('width ', width)
+        const backgroundPosition = width === '' ? '0 0' : `${-width}% 0`
+    return `
+    <div class="row py-1">
+        <div class="col-6 d-flex justify-content-start align-items-center" style="colorxxx: ${topics[index].colour};">
+            <div class="text-start">
+                ${time.title}
+            </div>
+        </div>
+        <div class="col-6 d-flex justify-content-start align-items-center">
+            <div class="input-group mb-3">
+                <button class="btn btn-outline-secondary action" data-time="${index}" data-value="-5" type="button"><i class="bi bi-dash-lg"></i></button>
+                <input type="text" class="form-control text-center counter counter-${index}" data-time="${index}" disabled placeholder="${time.lineTotal}"
+                    style="
+
+                    background-position: ${backgroundPosition}">
+                <button class="btn btn-outline-secondary action" data-time="${index}" data-value="5" type="button"><i class="bi bi-plus-lg"></i></button>
+            </div>
+        </div>
+    </div>`
+  }).join('')}
+    <div class="row py-1">
+        <div class="col-12 d-flex justify-content-center align-items-center">
+            <button type="button" class="btn btn-outline-light w-100 time-submit" disabled>55 points remaining</button>
+        </div>
+    </div>
+    `
+    document.querySelector('.content').innerHTML = html
+    console.log('drawTime')
+
+    
+    const timeSubmitBtn = document.querySelector('.time-submit')
+    document.querySelectorAll('.action').forEach(button => {
+        button.addEventListener('click', function () {
+
+            const total = times.reduce((acc, time) => acc + time.lineTotal, 0)
+            const spare = 100 - total
+            console.log('total', total, '->', spare)
+            
+            const valueAdj = parseInt(this.getAttribute('data-value'))
+            const timeIndex = parseInt(this.getAttribute('data-time'))
+            const time = times[timeIndex]
+            console.log('timeIndex', timeIndex, time, valueAdj)
+
+            if (time.lineTotal + valueAdj < 0) {
+                console.log('less than 0')
+            } else if (time.lineTotal + valueAdj > 100) {
+                console.log('greater than lineMax')
+            } else if (spare <= 0 && valueAdj > 0) {
+                console.log('no points left')
+            } else {
+                time.lineTotal = time.lineTotal + valueAdj
+                const counter = document.querySelector(`.counter[data-time="${timeIndex}"]`)
+                counter.value = time.lineTotal
+                const width = time.lineTotal / 100 * 100
+                console.log('width ', width)
+                counter.style.backgroundPosition = width === '' ? '0 0' : `${-width}% 0`
+            }
+
+            const totalUpdated = times.reduce((acc, time) => acc + time.lineTotal, 0)
+            const spareUpdated = 100 - totalUpdated
+            if (spareUpdated > 0) {
+                timeSubmitBtn.innerHTML = `${spareUpdated} points remaining`
+                timeSubmitBtn.setAttribute('disabled', 'disabled')
+                timeSubmitBtn.classList.remove('btn-secondary')
+                timeSubmitBtn.classList.add('btn-outline-secondary')
+            } else {
+                timeSubmitBtn.innerHTML = 'Submit'
+                timeSubmitBtn.removeAttribute('disabled')
+                timeSubmitBtn.classList.remove('btn-outline-secondary')
+                timeSubmitBtn.classList.add('btn-secondary')
+            }
+
+            
+        })
+    })
+
+    timeSubmitBtn.addEventListener('click', async () => {
+        console.log('Submit')
+
+        Toastify({
+            text: "Submitted",
+            duration: 3000,
+            position: 'center',
+            style: {
+                background: "linear-gradient(to right, black, black)"   
+            }
+        }).showToast()
+
+
+
+        timeSubmitBtn.setAttribute('disabled', 'disabled')
+        await fetch('/api/time', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(times.map(t => t.lineTotal))
+            })
+        // drawTime()
+
+        // window.alert('Submitted - Thanks!')
+    })
+}
+const renderTimeResults = () => {
+    const html =
+    ` <div class="row h-10">
+            <div class="col-6 offset-3 d-flex justify-content-center align-items-center">
+                <div class="content">
+                    <a href="/results" class="link-light link-underline link-underline-opacity-0"><h1>Elevator Architecture</h1></a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <canvas id="time-chart" style="height: 80vh!important"></canvas>
+            </div>
+        </div>
+            
+    `
+    document.querySelector('.content').innerHTML = html
+
+    const ctx = document.getElementById('time-chart')
+    console.log('chartCtx', ctx)
+    const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: times.map(t => t.title),
+            datasets: [{
+                label: 'results',
+                // data: [12, 19, 3, 5, 2, 3, 7, 4, 9],
+                data: [10, 15,25],
+                backgroundColor: topics.map(t => t.colour),
+                // backgroundColor: topics.map(t => t.lighter),
+                // borderColor: topics.map(t => t.colour)
+            }]
+            },
+        options: {
+        indexAxis: 'y',
+        // scales: {
+        //     y: {
+        //     beginAtZero: true,
+        //     display: false
+        //     },
+        //     x: {
+        //     ticks: {
+        //         display: false
+        //     }
+        //     }
+        // },
+        // elements: {
+        //     bar: {
+        //     borderWidth: 2
+        //     }
+        // },
+        //   options: {rotation: (0.5 * Math.PI)},
+
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'right',
+                fullSize: true,
+                labels: {
+                    font: {
+                        size: 34,
+                    },
+                    color: 'white'
+                }
+                
+            // display: false
+            },
+            datalabels: {
+            //   anchor: 'end',
+            offset: 10,
+            //   clamp: true
+            color: 'black',
+            font: {
+                size: 34
+            }
+            }
+        }
+
+        }
+    })
+    return chart
+}
+const updateTimeResults = async (chart) => {
+    console.log('updateTimeResults')
+    const response = await fetch('/api/time')
+    const results = await response.json()
+
+    console.log('data', chart.data.datasets[0], results)
+    //   const randomList = Array.from({ length: 9 }, () => Math.floor(Math.random() * 21))
+    chart.data.datasets[0].data = results
+    chart.update()
+}
+const initTimeResults = async () => {
+  const chart = renderTimeResults()
+  updateTimeResults(chart)
+  setInterval(() => {
+    updateTimeResults(chart)
+  }, 6000)
+}
+
+
 if (window.location.pathname === '/results') {
   console.log('The URL path is /results')
   initResults()
 } else if (window.location.pathname === '/clear') {
   console.log('clear')
   clearResults()
+} else if (window.location.pathname === '/time') {
+  initTimeResults()
 } else {
   initAddSkills()
 }
